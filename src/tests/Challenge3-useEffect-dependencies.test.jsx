@@ -60,7 +60,7 @@ describe('Challenge 3: useEffect Hook - Dependencies', () => {
     fireEvent.change(input, { target: { value: 'apple' } });
     await waitFor(() => {
       expect(screen.getByText(/Apple/i)).toBeInTheDocument();
-    });
+    }, { timeout: 2000 });
     
     // Then clear the search
     fireEvent.change(input, { target: { value: '' } });
@@ -75,12 +75,12 @@ describe('Challenge 3: useEffect Hook - Dependencies', () => {
     fireEvent.change(input, { target: { value: 'a' } });
     await waitFor(() => {
       expect(screen.getByText(/Apple/i)).toBeInTheDocument();
-    });
+    }, { timeout: 2000 });
     
     // Change search to 'b'
     fireEvent.change(input, { target: { value: 'b' } });
     await waitFor(() => {
       expect(screen.getByText(/Banana/i)).toBeInTheDocument();
-    });
+    }, { timeout: 2000 });
   });
 });

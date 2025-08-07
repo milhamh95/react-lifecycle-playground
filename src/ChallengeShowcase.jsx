@@ -57,7 +57,7 @@ const ChallengeShowcase = () => {
   const CurrentComponent = currentChallenge?.component;
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif', color: "black" }}>
       {/* Header */}
       <header style={{ 
         backgroundColor: '#f8f9fa', 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 /**
  * Challenge 3: useEffect Hook - Run on Dependency Changes
@@ -37,9 +37,9 @@ const searchItems = async (term) => {
 
 const SearchComponent = () => {
   // TODO: Add useState for searchTerm, searchResults, and isLoading
-  const searchTerm = '';
-  const searchResults = [];
-  const isLoading = false;
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // TODO: Add useEffect with [searchTerm] dependency array
   // This should:
@@ -52,11 +52,33 @@ const SearchComponent = () => {
   const handleInputChange = (e) => {
     const value = e.target.value;
     // This won't work without state management
-    console.log('Search term:', value);
+    setSearchTerm(value);
   };
 
+  useEffect(() => {
+    const loadItems = async () => {
+      if (searchTerm === "") {
+        setIsLoading(false);
+        setSearchResults([]);
+        return;
+      }
+      try {
+        setIsLoading(true);
+        const data = await searchItems(searchTerm);
+        setSearchResults(data);
+      } catch (err) {
+        console.error('Failed to fetch search results:', err);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadItems();
+  }, [searchTerm])
+
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px', color: "black" }}>
       <h2>useEffect Challenge - Dependencies ([searchTerm])</h2>
       <div style={{ marginBottom: '20px' }}>
         <input
@@ -77,11 +99,11 @@ const SearchComponent = () => {
       <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '5px' }}>
         {/* TODO: Fix the display logic */}
         {isLoading ? (
-          <p>Searching...</p>
+          <p style={{color: 'black'}}>Searching...</p>
         ) : searchTerm === '' ? (
-          <p>Enter a search term to find fruits</p>
+          <p style={{color: 'black'}}>Enter a search term to find fruits</p>
         ) : searchResults.length > 0 ? (
-          <div>
+          <div style={{color: 'black'}}>
             <h3>Search Results:</h3>
             <ul>
               {searchResults.map((item, index) => (
@@ -90,7 +112,7 @@ const SearchComponent = () => {
             </ul>
           </div>
         ) : (
-          <p>No results found for "{searchTerm}"</p>
+          <p style={{color: 'black'}}>No results found for "{searchTerm}"</p>
         )}
       </div>
       

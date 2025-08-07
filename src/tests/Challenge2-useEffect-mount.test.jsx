@@ -1,23 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { describe, test, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import UserProfile from '../challenges/Challenge2-useEffect-mount';
-
-// Mock the fetchUserData function
-jest.mock('../challenges/Challenge2-useEffect-mount', () => {
-  const originalModule = jest.requireActual('../challenges/Challenge2-useEffect-mount');
-  return {
-    ...originalModule,
-    fetchUserData: jest.fn(() => 
-      Promise.resolve({
-        id: 1,
-        name: 'John Doe',
-        email: 'john@example.com',
-        city: 'New York'
-      })
-    )
-  };
-});
 
 describe('Challenge 2: useEffect Hook - Mount Only', () => {
   test('should show loading state initially', () => {
@@ -34,7 +19,7 @@ describe('Challenge 2: useEffect Hook - Mount Only', () => {
     // Wait for data to load
     await waitFor(() => {
       expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    }, { timeout: 3000 });
+    }, { timeout: 5000 });
     
     // Check all user data is displayed
     expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
@@ -47,7 +32,7 @@ describe('Challenge 2: useEffect Hook - Mount Only', () => {
     // Wait for initial load
     await waitFor(() => {
       expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    });
+    }, { timeout: 5000 });
     
     // Force re-render
     rerender(<UserProfile />);

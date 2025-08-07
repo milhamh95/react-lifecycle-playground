@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 /**
  * Challenge 2: useEffect Hook - Run Once on Mount
@@ -21,6 +21,7 @@ import React from 'react';
 
 // Mock API function (simulates real API call)
 const fetchUserData = async () => {
+  console.log("call fetch user data")
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
@@ -34,35 +35,41 @@ const fetchUserData = async () => {
 };
 
 const UserProfile = () => {
-  // TODO: Add useState for user data and loading state
-  const userData = null;
-  const isLoading = false;
+  const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); 
 
-  // TODO: Add useEffect to fetch data ONLY on mount (empty dependency array [])
-  // This should run the fetchUserData function and update state
-  
-  // BROKEN: This runs on every render!
-  fetchUserData().then(data => {
-    // This won't work without proper state management
-    console.log('User data:', data);
-  });
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchUserData();
+        setUserData(data)
+      } catch(err) {
+        console.error('Failed to fetch user data:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadUserData();  
+  }, []);
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>useEffect Challenge - Mount Only ([])</h2>
+      <h2 style={{color: 'black'}}>useEffect Challenge - Mount Only ([])</h2>
       <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '5px' }}>
         {/* TODO: Fix loading and data display */}
         {isLoading ? (
-          <p>Loading user data...</p>
+          <p style={{color: 'black'}}>Loading user data...</p>
         ) : userData ? (
-          <div>
+          <div style={{color: 'black'}}>
             <h3>User Profile</h3>
             <p><strong>Name:</strong> {userData.name}</p>
             <p><strong>Email:</strong> {userData.email}</p>
             <p><strong>City:</strong> {userData.city}</p>
           </div>
         ) : (
-          <p>No user data available</p>
+          <p style={{color: 'black'}}>No user data available</p>
         )}
       </div>
       <p style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
