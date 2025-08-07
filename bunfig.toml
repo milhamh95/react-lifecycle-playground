@@ -1,0 +1,3 @@
+[test]
+# Use jsdom for DOM testing
+preload = ["./src/tests/setup.js"]
