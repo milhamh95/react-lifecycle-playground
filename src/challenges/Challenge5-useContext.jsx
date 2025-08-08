@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
 /**
  * Challenge 5: useContext Hook
@@ -22,6 +22,7 @@ import React from 'react';
 
 // TODO: Create ThemeContext using createContext
 // const ThemeContext = createContext();
+const ThemeContext = createContext();
 
 // Mock theme configurations
 const themes = {
@@ -45,13 +46,12 @@ const themes = {
 // 2. Provide theme value and toggle function via context
 // 3. Wrap children with ThemeContext.Provider
 const ThemeProvider = ({ children }) => {
-  // TODO: Add useState for current theme
-  const currentTheme = 'light';
+  const [currentTheme, setCurrentTheme] = useState('light');
   
   // TODO: Add toggle function
   const toggleTheme = () => {
     // This should switch between light and dark
-    console.log('Toggle theme called');
+    setCurrentTheme(prev => prev === 'light' ? 'dark' : 'light')
   };
 
   // TODO: Create context value object
@@ -64,7 +64,9 @@ const ThemeProvider = ({ children }) => {
   return (
     <div>
       {/* TODO: Wrap with ThemeContext.Provider and pass themeValue */}
-      {children}
+      <ThemeContext.Provider value={themeValue}>
+        {children}
+      </ThemeContext.Provider>
     </div>
   );
 };
@@ -72,12 +74,7 @@ const ThemeProvider = ({ children }) => {
 // Header component that should use theme context
 const Header = () => {
   // TODO: Use useContext to get theme data
-  // const { theme, currentTheme, toggleTheme } = useContext(ThemeContext);
-  
-  // BROKEN: No access to theme context
-  const theme = themes.light; // Hardcoded!
-  const currentTheme = 'light'; // Hardcoded!
-  const toggleTheme = () => console.log('No context!');
+  const { theme, currentTheme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <header style={{
@@ -107,10 +104,7 @@ const Header = () => {
 // Content component that should use theme context
 const Content = () => {
   // TODO: Use useContext to get theme data
-  // const { theme } = useContext(ThemeContext);
-  
-  // BROKEN: No access to theme context
-  const theme = themes.light; // Hardcoded!
+  const { theme } = useContext(ThemeContext);
 
   return (
     <main style={{
@@ -137,17 +131,18 @@ const Content = () => {
 // Main component that should wrap everything with ThemeProvider
 const ThemeApp = () => {
   return (
-    <div>
-      {/* TODO: Wrap with ThemeProvider */}
-      <Header />
-      <Content />
-      <div style={{ padding: '20px', fontSize: '12px', color: '#666' }}>
-        <p>
-          This challenge demonstrates useContext for sharing theme data across components.
-          Fix the context setup to make the theme toggle work!
-        </p>
+    <ThemeProvider>
+      <div>
+        <Header />
+        <Content />
+        <div style={{ padding: '20px', fontSize: '12px', color: '#666' }}>
+          <p>
+            This challenge demonstrates useContext for sharing theme data across components.
+            Fix the context setup to make the theme toggle work!
+          </p>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 
