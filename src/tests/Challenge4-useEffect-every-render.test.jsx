@@ -1,11 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 import RenderTracker from '../challenges/Challenge4-useEffect-every-render';
 
 // Mock document event listeners
-const mockAddEventListener = jest.fn();
-const mockRemoveEventListener = jest.fn();
+const mockAddEventListener = vi.fn();
+const mockRemoveEventListener = vi.fn();
 Object.defineProperty(document, 'addEventListener', {
   value: mockAddEventListener,
 });
@@ -62,7 +63,8 @@ describe('Challenge 4: useEffect Hook - Every Render', () => {
 
   test('should display warning about effect running on every render', () => {
     render(<RenderTracker />);
-    expect(screen.getByText(/This effect runs on every render/i)).toBeInTheDocument();
+    // Use a more specific query to avoid ambiguity
+    expect(screen.getByText(/⚠️ This effect runs on every render/i)).toBeInTheDocument();
     expect(screen.getByText(/use with caution/i)).toBeInTheDocument();
   });
 

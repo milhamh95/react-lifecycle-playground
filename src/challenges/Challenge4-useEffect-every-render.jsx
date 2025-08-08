@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 /**
  * Challenge 4: useEffect Hook - Run on Every Render
@@ -24,8 +24,11 @@ import React from 'react';
 
 const RenderTracker = () => {
   // TODO: Add useState for renderCount and mousePosition
-  const renderCount = 0;
-  const mousePosition = { x: 0, y: 0 };
+  const [renderCount, setRenderCount] = useState(0);
+  const [mousePosition, setMousePosition] = useState({
+    x: 0,
+    y: 0
+  })
 
   // TODO: Add useEffect with NO dependency array (runs on every render)
   // This should:
@@ -36,17 +39,31 @@ const RenderTracker = () => {
   // TODO: Fix this mouse handler to update mousePosition state
   const handleMouseMove = (event) => {
     // This won't work without state management
+    setMousePosition({
+      x: event.clientX,
+      y: event.clientY,
+    })
     console.log('Mouse position:', event.clientX, event.clientY);
   };
+
+  useEffect(() => {
+    setRenderCount(prev => prev + 1)
+    
+    document.addEventListener("mousemove", handleMouseMove)
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove)
+    }
+  }, [])
 
   // TODO: Fix this button handler to trigger re-renders
   const forceReRender = () => {
     // This should trigger a re-render somehow
-    console.log('Forcing re-render...');
+    setRenderCount(prev => prev + 1)
   };
 
   return (
-    <div style={{ padding: '20px', height: '400px' }}>
+    <div style={{ padding: '20px', height: '400px', color: 'black' }}>
       <h2>useEffect Challenge - Every Render (no dependency array)</h2>
       
       <div style={{ 
